@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+	<head>
+	<meta charset="utf-8">
+		<title>HTML</title>
+		<style>
+			#jb {
+				width: 100%;
+				height: 50px;
+			}
+		</style>
+		<script>
+      var item1, input, rate;
+      var tmp = 0;
+      function item_input() {
+        item1 = document.getElementById('item1').value;
+      }
+			function jbFunc() {
+        input = document.getElementById('input').value;
+        document.getElementById( 'jb' ).value += input/item1*100;
+        rate = document.getElementById( 'jb' ).value;
+        if(rate>=100){
+          tmp = parseInt(document.getElementById('rat').innerHTML);
+          tmp = tmp + input/item1*100;
+          document.getElementById('rat').innerText = tmp+'%';
+        }
+        else{
+          document.getElementById('rat').innerText = rate+'%';
+        }
+      }
+
+		</script>
+	</head>
+	<body>
+		<div>
+      아이템 금액: <input id="item1" type="text" name="" value="">
+      <button onclick="item_input()">제출</button> <br>
+      후원금액: <input id="input" type="text" name="" value="">
+      <button id="btn" onclick="jbFunc()">제출</button>
+			<progress value="0" max="100" id="jb"></progress>
+      진행률: <b id="rat">0%</b>
+		</div>
+	</body>
+</html>

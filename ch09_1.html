@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>네이버 예제</title>
+    <style media="screen">
+      * { margin: 0; padding: 0;}
+
+      /* 전체를 포함하는 박스 */
+      #wrap {
+        width: 346px; height: 340px;   /* 크기 설정 */
+        margin: 0 auto;                /* 가운데 정렬 */
+        margin-top: 10px;              /* 브라우저 상단 여백 */
+      }
+
+      #content1, #content2 {
+        width: 346px; height: 185px;   /* content1 은 위의 박스 , content2 는 아래 박스로 동일한 사이즈 */
+        position: relative;            /* 내부에 있는 요소들의 위치를 절대 위치로 선정하면서 부모가 기준이 되도록 설정 */
+      }
+
+      #content1 {
+        margin-bottom: 19px;            
+      }
+
+      #content2_1, #content2_2 {
+        width: 166px;
+        height: 185px;
+        float: left;
+      }
+
+      #content2_1 {
+        margin-right: 14px;
+      }
+
+      #shadow, #description {
+        width: 346px; height: 50px;
+        position: absolute;
+        bottom: 0; left: 0;
+      }
+
+      #description {
+        color: white;
+      }
+
+      #shadow {
+        background-color: #000000;
+        opacity: 0.3;
+      }
+
+      #description .tb_bg {
+        display: inline-block;
+        height: 32px;
+        margin-top: 9px;
+        padding: 0 12px;
+      }
+
+      #description  .tb_d {
+        font-size: 12px;
+        line-height: 16px;
+        opacity: 0.8;
+        display: block;
+        width: 233px; height: 16px;
+        vertical-align: top;
+      }
+
+      #description .tb_t {
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: 700;
+        display: block;
+        width: 233px; height: 16px;
+        vertical-align: top;
+      }
+
+      .tb_title {
+        display: inline-block;
+        color: #222;
+        height: 36px;
+        line-height: 18px;
+        font-size: 12px;
+        font-weight: 700;
+        font-family: Dotum, sans-serif;
+      }
+
+      .tb_source {
+        color: #888;
+        font-size: 12px;
+        line-height: 16px;
+        font-family: Dotum, sans-serif;
+      }
+
+      img {
+        transform: scale(1);
+
+        transition-duration: 0.2s;
+      }
+
+      .cnt_box {
+        overflow: hidden;
+      }
+
+      .cnt_box_sub {
+        height: 108px;
+        width: 166px;
+        margin-bottom: 8px;
+      }
+
+      .cnt_box:hover img {
+        transform: scale(1.05);
+      }
+
+      .cnt_box:hover .tb_bg, .cnt_box:hover .tb_title {
+        text-decoration: underline;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="" id="wrap">
+      <div class="cnt_box" id="content1">
+        <img src="https://s.pstatic.net/static/www/mobile/edit/2017/0511/mobile_171629241512.jpg" alt="">
+        <div class="" id="shadow"></div>
+        <div class="" id="description">
+          <div class="tb_bg">
+            <span class="tb_d" >와이낫TV 웹드라마 <오피스워치> 7회</span>
+            <span class="tb_t">금요일 저녁 같은 그녀를 자꾸 바라본다</span>
+          </div>
+        </div>
+      </div>
+      <div class="" id="content2">
+        <div class="cnt_box" id="content2_1">
+          <div class="cnt_box cnt_box_sub">
+            <img src="https://s.pstatic.net/static/www/mobile/edit/2017/0512/mobile_074733649582.jpg" alt="">
+          </div>
+          <span class="tb_title">남궁민X준호X트와이스의 깜짝 무대, TT</span><br>
+          <span class="tb_source">해피 투게더 3</span>
+        </div>
+        <div class="cnt_box" id="content2_2">
+          <div class="cnt_box cnt_box_sub">
+            <img src="https://s.pstatic.net/static/www/mobile/edit/2017/0512/mobile_074103862851.jpg" alt="">
+          </div>
+          <span class="tb_title">룰라&빌보드차트 1위의 듀엣무대! '날개 잃은 천사'</span><br>
+          <span class="tb_source">너의 목소리가 보여4</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

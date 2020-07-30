@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      * {margin: 0; padding: 0;}
+
+      /* 전체를 포함하는 박스 */
+      #wrap {
+        width: 470px; height: 610px;   /* 크기 설정 */
+        margin: 0 auto;                /* 가운데 정렬 */
+        margin-top: 10px;              /* 브라우저 상단 여백 */
+      }
+
+      /* 상품 기본 박스 */
+      .box {
+        border: 1px solid #cccccc; /* 보더 설정 */
+        position: relative;        /* 내부에 있는 요소들의 위치를 절대 위치로 선정하면서 부모가 기준이 되도록 설정 */
+      }
+
+      #content1, #content2 {
+        width: 470px; height: 300px; /* content1 은 위의 박스 , content2 는 아래 박스로 동일한 사이즈 */
+        box-sizing: border-box;      /* 외곽선을 포함하여 사이즈를 계산하도록 설정 */
+      }
+
+      #content1 {
+        margin-bottom: 10px;         /* 위의 박스와 아래 박스의 여백 설정 */
+        background-image: url('http://t3a.coupangcdn.com/thumbnails/remote/x/image/displayitem/displayitem_1dc0c68f-75a0-4f14-913e-bb43731ad9db.jpg');
+        /* 첫번째 박스의 이미지를 배경이미지로 설정 */
+      }
+
+      #content2_1, #content2_2 {
+        width: 230px; height: 300px;  /* content2_1 은 아래 왼쪽 박스, content2_2 는 아래 오른쪽 박스로 동일한 사이즈 */
+        box-sizing: border-box;       /* 외곽선을 포함하여 사이즈를 계산하도록 설정 */
+        float: left;                  /* float 속성을 설정하여 가로 정렬이 되도록 함 */
+      }
+
+      #content2_1 {
+        margin-right: 10px;            /* 아래 박스 사이의 여백 설정 */
+        background-image: url('http://t2c.coupangcdn.com/thumbnails/remote/x/image/displayitem/displayitem_2c2ae36b-1b8c-48a5-b45a-3399b88c7107.jpg');
+        /* 아래 왼쪽 박스의 배경이미지 설정 */
+      }
+
+      #content2_2 {
+        background-image: url('http://t2a.coupangcdn.com/thumbnails/remote/x/image/displayitem/displayitem_3cd69b1a-31d2-48d0-a3c3-8e542efaa0f5.jpg');
+        /* 아래 오른쪽 박스의 배경이미지 설정 */
+      }
+
+      /* 가격 박스 */
+      .price_box {
+        position: absolute;      /* 위치를 절대 좌표로 설정할 수 있도록 설정 */
+        top: 138px;              /* y좌표의 위치 */
+        left: 23px;              /* x좌표의 위치 */
+        font-family: dotum;      /* 글꼴 */
+        font-size: 16px;         /* 글꼴 사이즈 */
+        font-weight: bold;       /* 글꼴 두께 */
+      }
+
+      /* 가격중 숫자만 */
+      .price {
+        font-family: Tahoma;     /* 글꼴 */
+        font-weight: bold;       /* 글꼴 두께 */
+        font-size: 21px;         /* 글꼴 사이즈('원' 보다 숫자가 크도록) */
+      }
+
+      /* 구매하기 버튼 */
+      .btn_buy_small, .btn_buy_big {
+        font-size: 13px;          /* 글꼴 사이즈 */
+        color: white;             /* 글꼴 색상 */
+        font-weight: lighter;     /* 글꼴 두께 */
+        position: absolute;       /* 위치를 절대 좌표로 설정할 수 있도록 설정 */
+        height: 40px;             /* 높이 */
+        left: 20px;               /* x좌표의 위치 */
+        bottom: 20px;             /* y좌표의 위치 - 아래를 기준으로 설정 */
+        line-height: 40px;        /* 문자열의 세로 정렬 */
+        text-align: center;       /* 문자열의 가로 정렬 */
+      }
+
+      /* 구매하기 작은 버튼 (보통때 보이는) */
+      .btn_buy_small {
+        width: 40px;                  /* 넓이 */
+        background-color: #cccccc;    /* 배경색 */
+        opacity: 0.8;                 /* 투명도를 부여하여 약간 밝게 보이도록 함 */
+        display: block;               /* 기본설정이 보이도록 */
+      }
+
+      /* 구매하기 큰 버튼 (마우스 올라왔을 때 보이는) */
+      .btn_buy_big {
+        background-color: #4285f4;    /* 배경색 */
+        width: 110px;                 /* 넓이 */
+        display: none;                /* 기본설정이 보이지 않도록 */
+      }
+
+
+      /* 마우스 오버 효과 */
+      .box:hover .btn_buy_small {
+        display: none;                /* 마우스 포인터 올라오면 보이지 않도록 */
+      }
+
+      .box:hover .btn_buy_big {
+        display: block;               /* 마우스 포인터 올라오면 보이도록 */
+      }
+
+      .shadow {                       /* 마우스 포인트 올라오면 보이는 그림자 박스 */
+        position: absolute;           /* 위치를 절대값으로 설정 */
+        top: 0; left: 0;              /* x, y 좌표를 0으로 설정하여 부모와 위치가 동일하도록 */
+        width: 100%; height: 100%;    /* 높이와 넓이를 100%로 설정하여 부모와 크기가 동일하도록 */
+        background-color: #aaaaaa;    /* 배경색 */
+        opacity: 0.1;                 /* 투명도 */
+        display: none;                /* 기본설정이 보이지 않도록 */
+      }
+
+      .box:hover {
+        border-color: #4285f4;        /* 마우스 포인터 올라오면 테두리 컬러 변경 */
+      }
+
+      .box:hover .shadow {
+        display: block;                /* 마우스 포인터 올라오면 그림자 박스 보이도록 */
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="" id="wrap">
+      <div class="box" id="content1">
+        <div class="shadow"></div>
+        <div class="price_box"><span class="price">9,800</span>원</div>
+        <div class="btn_buy_small">&gt;</div>
+        <div class="btn_buy_big">구매하기 &gt;</div>
+      </div>
+      <div class="" id="content2">
+        <div class="box" id="content2_1">
+          <div class="shadow"></div>
+          <div class="price_box"><span class="price">5,600</span>원</div>
+          <div class="btn_buy_small">&gt;</div>
+          <div class="btn_buy_big">구매하기 &gt;</div>
+        </div>
+        <div class="box" id="content2_2">
+          <div class="shadow"></div>
+          <div class="price_box"><span class="price">19,800</span>원</div>
+          <div class="btn_buy_small">&gt;</div>
+          <div class="btn_buy_big">구매하기 &gt;</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

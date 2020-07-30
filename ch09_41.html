@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      * {margin: 0; padding: 0;}
+
+      .image_area {
+        width: 460px; height: 630px;
+        margin: 0 auto;
+        margin-top: 20px;
+        border: 1px solid #ddd;
+      }
+
+      .image_box {
+        width: 460px; height: 460px;
+        position: relative;
+      }
+
+      .big_img {
+        width: 460px; height: 460px;
+        position: absolute;
+        left: 0; top: 0;
+        display: none;
+      }
+
+      img.show {
+        display: block;
+      }
+
+      .thumb_list {
+        width: 100%;
+        position: relative;
+        margin-top: 20px;
+        text-align: center;
+        list-style: none;
+      }
+
+      .thumbnail {
+        display: inline-block;
+        width: 64px; height: 64px;
+        border: 2px solid #fff;
+        margin-left: 3px;
+      }
+
+      li.show {
+        border: 2px solid #e51b13;
+      }
+    </style>
+
+    <script type="text/javascript">
+
+
+    </script>
+  </head>
+  <body>
+    <div class="image_area">
+      <div class="image_box">
+        <img id="img1" class="big_img show" src="http://img.wemep.co.kr/deal/8/837/2098378/727513ff9485435ecb93987ad6db188f24d273ca.jpg" alt="">
+        <img id="img2" class="big_img" src="http://img.wemep.co.kr/deal/8/837/2098378/d1a7f743d947caac39be84c0f8334e16da93d0d4.jpg" alt="">
+        <img id="img3" class="big_img" src="http://img.wemep.co.kr/deal/8/837/2098378/1616dccc2c3ac80ff5c7932ee07cc63b8941d8eb.jpg" alt="">
+        <img id="img4" class="big_img" src="http://img.wemep.co.kr/deal/8/837/2098378/63343c1e8b1a09a5f8d3325eef7053d1eb7dc9a2.jpg" alt="">
+        <img id="img5" class="big_img" src="http://img.wemep.co.kr/deal/8/837/2098378/e58fadbbd7f8be95d040e76e758e88d7d89660a5.jpg" alt="">
+      </div>
+      <ul class="thumb_list">
+        <li id="thumb1" class="thumbnail show"><img src="http://img.wemep.co.kr/deal/8/837/2098378/thumb/727513ff9485435ecb93987ad6db188f24d273ca.jpg" alt=""></li>
+        <li id="thumb2" class="thumbnail"><img src="http://img.wemep.co.kr/deal/8/837/2098378/thumb/d1a7f743d947caac39be84c0f8334e16da93d0d4.jpg" alt=""></li>
+        <li id="thumb3" class="thumbnail"><img src="http://img.wemep.co.kr/deal/8/837/2098378/thumb/1616dccc2c3ac80ff5c7932ee07cc63b8941d8eb.jpg" alt=""></li>
+        <li id="thumb4" class="thumbnail"><img src="http://img.wemep.co.kr/deal/8/837/2098378/thumb/63343c1e8b1a09a5f8d3325eef7053d1eb7dc9a2.jpg" alt=""></li>
+        <li id="thumb5" class="thumbnail"><img src="http://img.wemep.co.kr/deal/8/837/2098378/thumb/e58fadbbd7f8be95d040e76e758e88d7d89660a5.jpg" alt=""></li>
+      </ul>
+    </div>
+  </body>
+</html>

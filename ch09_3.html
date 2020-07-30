@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      * {margin: 0; padding: 0;}
+
+      #wrap {
+        width: 1220px; height: 560px;
+        margin: 0 auto;
+        margin-top: 60px;
+      }
+
+      #aside, #content {
+        height: 560px;
+        float: left;
+      }
+
+      #aside {
+        width: 200px;
+        position: relative;
+        overflow: visible;
+        /*background-color: #dfdfdf;*/
+      }
+
+      #content {
+        width: 1020px;
+      }
+
+      #logo {
+        width: 200px; height: 180px;
+        text-align: center;
+        background-color: white;
+      }
+
+      #logo > img {
+        margin-top: 15px;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      .menu {
+        color: #ffffff;
+        font-size: 14px;
+        font-family: Verdana, sans-serif;
+        padding-left: 20px;
+        width: 200px; height: 40px;
+        box-sizing: border-box;
+        line-height: 40px;
+        position: relative;
+        z-index: 1000;
+      }
+
+      .menu_box {
+        position: absolute;
+        width: 200px; height: 380px;
+        left: 0; bottom: 0;
+        z-index: 10;
+
+        transition-duration: 0.5s;
+        transition-delay: 0.1s;
+      }
+
+      .menu_blank {
+        position: relative;
+        z-index: 1000;
+        width: 200px; height: 180px;
+        background-color: #dfdfdf;
+      }
+
+      .menu01, .menu_box01 { background-color: #00688f; }
+      .menu02, .menu_box02 { background-color: #0491b2; }
+      .menu03, .menu_box03 { background-color: #00a4ca; }
+      .menu04, .menu_box04 { background-color: #33cccc; }
+      .menu05, .menu_box05 { background-color: #00a4ae; }
+
+      .menu01:hover ~ .menu_box01 {left: 200px; }
+      .menu02:hover ~ .menu_box02 {left: 200px; }
+      .menu03:hover ~ .menu_box03 {left: 200px; }
+      .menu04:hover ~ .menu_box04 {left: 200px; }
+      .menu05:hover ~ .menu_box05 {left: 200px; }
+
+      .menu_box:hover {left: 200px;}
+
+    </style>
+  </head>
+  <body>
+    <div class="" id="wrap">
+      <div class="" id="aside">
+        <h1 id="logo">
+          <img src="http://media.ssu.ac.kr/images/header_logo.png" alt="">
+        </h1>
+        <ul>
+          <li class="menu menu01">About Global Media</li>
+          <li class="menu menu02">Academic Program</li>
+          <li class="menu menu03">Resources</li>
+          <li class="menu menu04">News & Events</li>
+          <li class="menu menu05">Community</li>
+          <li class="menu_box menu_box01"></li>
+          <li class="menu_box menu_box02"></li>
+          <li class="menu_box menu_box03"></li>
+          <li class="menu_box menu_box04"></li>
+          <li class="menu_box menu_box05"></li>
+          <li class="menu_blank"></li>
+        </ul>
+      </div>
+      <div class="" id="content">
+        <img src="http://media.ssu.ac.kr/images/main_visual_1.jpg" alt="">
+      </div>
+    </div>
+  </body>
+</html>
