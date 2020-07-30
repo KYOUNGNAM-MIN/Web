@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>2017학년도 1학기 웹프로그래밍 및 실습 기말고사</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.js" charset="utf-8"></script>
+    <script src="jquery.number.js" charset="utf-8"></script>
+    <style media="screen">
+      * {margin: 0; padding: 0; font-family: '돋움',dotum,sans-serif;}
+      a, a:active, a:visited {color: #666; text-decoration: none; cursor: pointer; }
+      dl, ul, ol, menu, li {list-style: none;}
+      em, th {font-style: normal;font-weight: normal;}
+
+      /* 전체 상자 */
+      .wrap {width: 938px; height: 662px; position: relative; margin: 0 auto; margin-top: 20px;}
+
+      /* 상품 정보 및 가격 정보 뷰 영역 */
+      .info_area {
+        width:394px; height: 600px; border: 1px solid #ddd; border-left: 0px; float: right;
+        background-color: #fbfbfb; position: relative; padding: 30px 40px; line-height: 1.5;}
+
+      /* 상품 이미지 뷰 영역 */
+      .image_area {width: 460px; height: 660px; border: 1px solid #ddd; float: left; position: relative;}
+
+      /* 이미지 뷰 */
+      .image_box {
+        width: 460px; height: 460px;
+        overflow: hidden;}
+
+      /* 이미지 뷰 좌우측 화살표 */
+      .prev, .next {
+        position: absolute; top: 35%; margin-top: -14px; width: 34px;    height: 41px;
+        background: url('http://pics.iacstatic.co.kr/pc/hp/new_homepage.png') no-repeat;}
+      .prev {left: 0;   background-position: -789px -257px;}
+      .prev:hover {background-position: -864px -257px;}
+      .next {right: 0;  background-position: -835px -258px;}
+      .next:hover {background-position: -912px -258px;}
+
+      /* 큰 이미지 개별 박스 */
+      .big_img {
+        width: 460px; height: 460px; position: absolute; left: 0; top: 0;
+        display: none;}
+
+      /* 전면에 보여지는 이미지에 주어지는 스타일 */
+      .image_box img.show {
+        display: block;}
+
+      /* 하단 썸네일 리스트 */
+      .thumb_list {width: 100%; position: relative; margin-top: 20px; text-align: center;}
+
+      /* 썸네일 이미지 */
+      .thumbnail {
+        display: inline-block; width: 64px; height: 64px;
+        border: 2px solid #fff; margin-left: 3px;}
+
+      /* 선택된 하단 썸네일 이미지에 주어지는 스타일 */
+      .thumb_list li.show {
+        border: 2px solid #e51b13;}
+
+      /* 상품 제목 */
+      .standardinfo {
+        height: auto; width: 100%; font-size: 12px; line-height: 14px; color: #999;
+        display: block; letter-spacing: -1px;  text-overflow: ellipsis;  white-space: nowrap;
+        word-wrap: normal;  font-weight: normal;}
+      .deal_tit {min-height: 58px; margin: 9px 0 26px 0; font-size: 21px; line-height: 29px; color: #333; font-weight: bold;}
+
+      /* 가격 정보 박스 (우측 영역에서 상품 제목 제외한 전체 영역) */
+      .price_info {position: relative; z-index: 90; margin: 0; padding: 0; width: 394px; height: 415px;}
+
+      /* 기본 가격 박스 */
+      .set_price_area {width: 302px; height: 49px; padding-left: 88px; margin-bottom: 37px; position: relative; display: table;}
+
+      /* 위메프가 이미지 관련 */
+      .sticker {position: absolute; bottom: 2px; left: 0; width: 88px; line-height: 1px;margin: 0; padding: 0; display: table;}
+      .dc_rate {height: 19px;
+        background: url(http://image.wemakeprice.com/images/resources/wmp/pages/deal_view/ico_onecut_info_v3.png) no-repeat;
+        background-position: 0 -380px;  overflow: hidden; display: block;}
+
+      /* 위메프가? 상자 관련 */
+      .prime {display: table;}
+      .prime .help {float: left; position: relative; top: -2px;  display: block;}
+      .btn_help {float: left; height: 15px; padding: 2px 4px 0; border: 1px solid #e6e6e6; background-color: #fff; font-size: 11px; line-height: 15px; color: #bbb; cursor: default; display: block;}
+
+      /* 위메프가? 상자 클릭시 보이는 설명 창 */
+      .layer_help {
+        display: none;
+        position: absolute;   top: 100%;   left: 0;
+        width: 250px;    margin-top: 5px;  padding: 8px 9px;
+        border: 1px solid #ddd;   background-color: #fff;
+        font-size: 11px;   line-height: 15px;   color: #999;
+      }
+      /* 위메프가? 상자 클릭시 보이는 설명상자의 방향 이미지*/
+      .ico_arr {
+        position: absolute;    top: -5px; left: 12px;  width: 7px; height: 5px;
+        background: url(http://image.wemakeprice.com/images/resources/wmp/pages/deal_view/onecut_img.png?20160215_5) no-repeat -140px -330px;
+      }
+
+      /* 기본 가격 */
+      .sale {display: table; overflow: hidden; font-weight: bold; line-height: 30px;}
+      .sale .num {float: left; font-weight: bold; font-size: 30px; line-height: 30px; font-family: Tahoma; color: #333;}
+      .sale .won {overflow: hidden; float: left; width: 20px; height: 23px; margin: 4px 0 0 1px; text-indent: -9999px;
+        background: url(http://image.wemakeprice.com/images/resources/wmp/pages/deal_view/onecut_img.png?20160215_5) -240px -445px no-repeat;}
+
+      /* 쿠폰 다운받기 관련 */
+      .coupon_down_area {position: relative; z-index: 1; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #e8e8e8; display: block;}
+      /* 쿠폰 다운받기 버튼 */
+      .coupon_down_area .btn_coupon_down { overflow: hidden; float: left; width: 109px; height: 24px;
+        background: url(http://image.wemakeprice.com/images/resources/wmp/pages/deal_view/onecut_img.png?20160215_5) no-repeat 0 -740px;
+        text-indent: -9999px; cursor: pointer; border: 0; vertical-align: middle; }
+      .coupon_down_area:before, .coupon_down_area:after {display: table; content: ''; }
+      .coupon_down_area:after { clear: both; }
+
+      /* 쿠폰 다운받기 클릭하면 보여지는 상자*/
+      .coupon_down_area .layer_coupon_down {
+        display: none;
+        position: absolute; top: 100%; right: 0; z-index: 1; width: 468px; padding: 20px; border: 1px solid #aaa; background-color: #fff; }
+      .coupon_down_area .layer_coupon_head {position: relative;}
+      .coupon_down_area .layer_coupon_head:before, .coupon_down_area .layer_coupon_head:after {display: table; content: '';}
+      .coupon_down_area .layer_coupon_head:after {clear: both;}
+      .coupon_down_area .layer_coupon_head .tit {float: left; font-weight: bold; font-size: 14px; color: #333; }
+      .coupon_down_area .layer_coupon_head .txt {float: left; margin: 4px 0 0 6px; font-size: 11px; color: #999; letter-spacing: -1px;}
+      .coupon_down_area .layer_coupon_cont {margin-top: 12px; border-top: 1px solid #aaa;}
+      .coupon_down_area .layer_coupon_cont > .inner {overflow-y: auto; max-height: 172px; border-width: 0 1px 1px; border-style: solid; border-color: #dfdfdf;}
+
+      .coupon_down_area .table_coupon { border-collapse: collapse; border-spacing: 0; }
+      .coupon_down_area .table_coupon th:first-child, .coupon_down_area .table_coupon td:first-child { border-left: 0; }
+      .coupon_down_area .table_coupon th { height: 34px; border-top-width: 0; background-color: #f9f9f9; font-weight: bold; }
+      .coupon_down_area .table_coupon th, .coupon_down_area .table_coupon td { border-width: 1px 0 0 1px; border-style: solid; border-color: #eee; font-size: 11px; color: #666; text-align: center; }
+      .coupon_down_area .table_coupon td { padding: 8px 15px 7px; }
+      .coupon_down_area .table_coupon .btn_down { cursor: pointer; background-color: transparent; display: block;
+          width: 43px; height: 19px; margin: 0 auto; padding-top: 1px; border-width: 1px; border-style: solid; border-color: #ccc #aaa #aaa #ccc; border-radius: 2px; font-size: 11px; color: #333; }
+
+      /* 쿠폰 다운받기 설명 상자 닫기 버튼 */
+      .coupon_down_area .layer_coupon_head .btn_close {
+          overflow: hidden; position: absolute; top: 0; right: 0; width: 15px; height: 15px;
+          background: url(http://image.wemakeprice.com/images/resources/wmp/pages/deal_view/onecut_img.png?20160215_5) no-repeat -120px -740px;
+          text-indent: -9999px; border: 0; cursor: pointer; }
+
+      /* 구매 개수 */
+      .buy_time {font-size: 14px; color: #666; display: table; margin-top: 14px; line-height: 25px; height: 27px; font-weight: bold; }
+
+      /* 상품, 기종, 색상 선택 영역 관련 */
+      .wrap_option {margin-top: 7px;}
+      .wrap_option .wcont_goods_option {margin-top: 10px;}
+      /* 상품, 기종, 색상 선택 박스 */
+      .option-select-box {position: relative; margin-bottom: 5px; width: 390px;}
+      .option-select-box .selected {display: block; overflow: hidden; height: 23px; padding: 0 40px 0 10px;
+          border: 1px solid #ddd; background-color: #fff; background-position: 100% 1px; font-size: 11px; line-height: 25px; color: #666;}
+      /* 상품, 기종, 색상 선택 목록 */
+      .option-select-box ul {
+          display: none; z-index: 900;
+          overflow-y: auto; position: absolute; left: 0; right: 0; top: 100%; max-height: 270px;
+          border: 1px solid #aaa; border-top: 0; background: #fff; }
+      .option-select-box ul .price-area { padding-right: 100px; }
+      .option-select-box a .size { display: inline-block; float: left; overflow: hidden; color: #666; text-overflow: ellipsis; white-space: nowrap;}
+      .option-select-box ul a { display: block; position: relative; padding: 6px 10px 4px; line-height: 18px; font-size: 11px; color: #393939;}
+      .option-select-box ul .size {display: inline-block; overflow: visible; float: none; color: #666; white-space: normal; word-break: break-all;}
+      .option-select-box ul .price-area .option-price {display: block; position: absolute; right: 10px; top: 5px;}
+      .option-select-box .price-area .option-price {display: block; position: absolute; right: 30px; top: 0; }
+      .option-select-box a .count {display: inline-block; color: #999;}
+
+      /* 상품, 기종, 색상 선택이 완료되면 출력되는 선택 결과 */
+      .wrap_option .option_result {border-top: 1px solid #e6e6e9; margin-top: 15px;
+          display: block;}
+      .wrap_option .option_result ul li {padding: 18px 0 15px 0; border-bottom: 1px solid #e6e6e9; }
+      .wrap_option .option_result ul li:before, .wrap_option .option_result ul li:after {display: table;content: '';}
+      .wrap_option .option_result ul li:after {clear: both;}
+      .wrap_option .option_result ul li span.option_tit { width: 198px; margin-right: 40px; color: #666; font-size: 11px; max-height: 32px; overflow: hidden;}
+      .wrap_option .option_result ul li span {float: left; line-height: 16px;}
+      .wrap_option .option_result ul li .option_cnt {margin-top: -4px; margin-right: 15px;}
+      /* 상품, 기종, 색상 선택이 완료되면 출력되는 선택 결과에서 구매 수량을 보여주는 입력상자 */
+      .wrap_option .option_result ul li .option_cnt input {
+          float: left; width: 26px; height: 19px; padding-right: 5px; padding-left: 0; border: 1px solid #ccc;
+          border-right: 0 none; color: #333; line-height: 21px; text-align: right;}
+      /* 상품, 기종, 색상 선택이 완료되면 출력되는 선택 결과에서 구매 수량을 보여주는 입력상자의 수량 증가 감소 아이콘 */
+      .wrap_option .option_result ul li .option_cnt .btn_num {
+          float: left; width: 16px; height: 21px; margin-left: -1px;
+          background: url(http://image.wemakeprice.com/images/resources/wmp/pages/deal_view/onecut_img.png?20160215_5) no-repeat -88px -288px;}
+      .wrap_option .option_result ul li .option_cnt .btn_num a {
+          overflow: hidden; float: left; width: 16px; height: 11px; font-size: 0; line-height: 0; text-indent: -9999px;}
+      /* 상품, 기종, 색상 선택이 완료되면 출력되는 선택 결과에서 합계 금액 */
+      .wrap_option .option_result ul li .total {font-size: 11px; color: #666; float: left; width: 70px; text-align: right;}
+      /* 상품, 기종, 색상 선택이 완료되면 출력되는 선택 결과에서 목록을 삭제하는 버튼 */
+      .wrap_option .option_result ul li a.btn_option_del {
+          background: url(http://image.wemakeprice.com/images/resources/wmp/pages/deal_view/onecut_img.png?20160215_5) no-repeat -111px -288px;
+          float: right; width: 15px; height: 15px; text-indent: -9999px; font-size: 0; line-height: 0; }
+
+      /* 총상품 금액 */
+      .wrap_option .option_total {float: right; padding-top: 15px;}
+      .wrap_option .option_total span.txt {height: 18px; line-height: 18px; color: #666; margin-top: 8px; margin-right: 7px; float: left;}
+      .wrap_option .option_total span.num {font-size: 24px; color: #ce1710; font-family: Tahoma; font-weight: bold; line-height: 28px; float: left;}
+      .wrap_option .option_total span.one {font-size: 20px; color: #ce1710; font-weight: bold; line-height: 32px; margin-top: 2px;}
+
+      /* 정보 영역 하단 버튼 관련 */
+      .price_info .wrap_btn {display: inline-block; position: relative; width: 100%;
+          height: 60px; margin: 0px; padding: 22px 0 0 0; clear: both; text-align: center;}
+      .price_info .wrap_btn .ba_select_btn {display: inline-block; margin: 0; float: none; vertical-align: top;}
+
+      /* 좋아요 버튼:일반 */
+      .price_info .wrap_btn .ba_select_btn a {
+          background: url(http://image.wemakeprice.com/images/resources/wmp/pages/deal_view/onecut_img.png?20160215_5) no-repeat;
+          background-position: -416px -204px;
+          width: 70px; height: 60px; margin: 0px; overflow: hidden; display: block;}
+      /* 좋아요 버튼: 좋아요 선택시 (참고: done 이라는 클래스를 추가하면 해당 스타일이 적용되고
+      해당 클래스를 삭제하면 일반 상태가 됨)*/
+      .price_info .wrap_btn .ba_select_btn a.done {background-position:  0px -204px;}
+       /* 좋아요 버튼 카운트 */
+      .price_info .wrap_btn .ba_select_btn .btn_cnt {
+          display: block; width: 70px; height: 13px; margin-top: 40px; font-weight: normal; text-align: center; font-family: Tahoma;
+          font-size: 10px; color: #666; position: relative;}
+
+      /* 장바구니 버튼 */
+      .price_info .wrap_btn .btn_cart {
+          background: url(http://image.wemakeprice.com/images/resources/wmp/pages/deal_view/onecut_btn.png) no-repeat 0 0;
+          width: 157px; height: 60px; display: inline-block; vertical-align: top;}
+
+      .price_info .wrap_btn .btn_buy {
+          background: url(http://image.wemakeprice.com/images/resources/wmp/pages/deal_view/onecut_btn.png) no-repeat -167px 0;
+          width: 155px; height: 60px; display: inline-block; vertical-align: top;}
+    </style>
+    <script src="https://code.jquery.com/jquery-3.1.1.js" charset="utf-8"></script>
+    <script type="text/javascript">
+
+    window.onload = function(){
+        roll();
+    }
+    var play;
+
+    function roll(){
+        play = setInterval(function(){
+        if(cur_img<5){
+          document.getElementById('img'+cur_img).setAttribute('class','big_img');
+          document.getElementById('thumb'+ cur_thumb).setAttribute('class','thumbnail');
+          cur_img++;
+          cur_thumb++;
+          cur_img_num++;
+          document.getElementById('img'+cur_img).setAttribute('class','big_img show');
+          document.getElementById('thumb'+ cur_thumb).setAttribute('class','thumbnail show');
+        }
+        else{
+          document.getElementById('img'+cur_img).setAttribute('class','big_img');
+          document.getElementById('thumb'+ cur_thumb).setAttribute('class','thumbnail');
+          cur_img = 1;
+          cur_thumb = 1;
+          cur_img_num = 1;
+          document.getElementById('img'+cur_img).setAttribute('class','big_img show');
+          document.getElementById('thumb'+ cur_thumb).setAttribute('class','thumbnail show');
+        }
+      },2000);
+    }
+    var cur_img=1;
+    var cur_thumb=1;
+    var cur_img_num=1;
+
+    function left(){
+      document.getElementById('img'+cur_img).setAttribute('class','big_img');
+      document.getElementById('thumb'+ cur_thumb).setAttribute('class','thumbnail');
+      clearInterval(play);
+      cur_img -=1 ;
+      cur_thumb -=1;
+      if(cur_img < 1){
+        cur_thumb = 5;
+        cur_img = 5;
+      }
+      document.getElementById('img'+cur_img).setAttribute('class','big_img show');
+      document.getElementById('thumb'+ cur_thumb).setAttribute('class','thumbnail show');
+      roll();
+    }
+    function right(){
+      document.getElementById('img'+cur_img).setAttribute('class','big_img');
+      document.getElementById('thumb'+ cur_thumb).setAttribute('class','thumbnail');
+      clearInterval(play);
+      cur_img += 1;
+      cur_thumb += 1;
+      if(cur_img > 5){
+        cur_img = 1;
+        cur_thumb = 1;
+      }
+      document.getElementById('img'+cur_img).setAttribute('class','big_img show');
+      document.getElementById('thumb'+ cur_thumb).setAttribute('class','thumbnail show');
+      roll();
+    }
+
+    function thOver(n){
+      document.getElementById('img'+cur_img).setAttribute('class','big_img');
+      document.getElementById('thumb'+cur_thumb).setAttribute('class','thumbnail');
+      clearInterval(play);
+      document.getElementById('img'+n).setAttribute('class','big_img show');
+      document.getElementById('thumb'+n).setAttribute('class','thumbnail show');
+    }
+
+    function thOut(n){
+      cur_img=n;
+      cur_thumb=n;
+      roll();
+    }
+    /*$(function(){
+      var a = $('.layer_help');
+      a.onmouseover(function(){
+        a.css('display','block');
+      });
+      a.onmouseout(function(){
+        a.css('display','none');
+      });
+    });*/
+    $(function(){
+      var hover1 = $('.btn_help');
+      hover1.mouseenter(function(){
+        $('.layer_help').css('display','block');
+      });
+      hover1.mouseleave(function(){
+        $('.layer_help').css('display','none');
+      });
+    });
+    $(function(){
+      var c1 = $('.btn_coupon_down');
+      var c2 = $('.layer_coupon_down');
+      c1.click(function(){
+        c2.css('display','block');
+      });
+    });
+    $(function(){
+      var c1 = $('.btn_close');
+      var c2 = $('.layer_coupon_down');
+      c1.click(function(){
+        c2.css('display','none');
+      });
+    });
+
+    function select1(){
+      document.getElementById('bul1').style.display = "block";
+    }
+    function select2(){
+      document.getElementById('bul2').style.display = "block";
+    }
+    function select3(){
+      document.getElementById('bul3').style.display = "block";
+    }
+$(function(){
+  $('#bul1 li').each(function(){
+    $('#bul1 li').click(function(){
+     $('#ba1').text(this);
+     document.getElementById('bul1').style.display = "none";
+    });
+  });
+});
+$(function(){
+  $('#bul2 li').each(function(){
+    $('#bul2 li').click(function(){
+     $('#ba2').text(this);
+     document.getElementById('bul2').style.display = "none";
+    });
+  });
+});
+$(function(){
+  $('#bul3 li').each(function(){
+    $('#bul3 li').click(function(){
+     $('#ba3').text(this);
+     document.getElementById('bul3').style.display = "none";
+    });
+  });
+});
+$(function(){
+  $('#btndel').click(function(){
+    $('.option_result').style.display = "none";
+  });
+});
+$(function(){
+  $('.plus_qty').click(function(){
+    $('#inputGoodsQty').value += 1;
+  });
+});
+$(function(){
+  $('.minus_qty').click(function(){
+    $('#inputGoodsQty').value -= 1;
+  });
+});
+    </script>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="image_area">
+        <div class="image_box">
+          <img id="img1" class="big_img show" src="http://img.wemep.co.kr/deal/3/114/2121143/9c6858f46938450637fab062590cd7ba07d367d4.jpg" alt="">
+          <img id="img2" class="big_img" src="http://img.wemep.co.kr/deal/3/114/2121143/430b5744da76503a8927011b25c4c992e9ca62c7.jpg" alt="">
+          <img id="img3" class="big_img" src="http://img.wemep.co.kr/deal/3/114/2121143/0ab37d4114532aa852b58adbfd877bccbc8963dd.jpg" alt="">
+          <img id="img4" class="big_img" src="http://img.wemep.co.kr/deal/3/114/2121143/8aee06b6a60035c3dd61a917bf688ee5e971169b.jpg" alt="">
+          <img id="img5" class="big_img" src="http://img.wemep.co.kr/deal/3/114/2121143/d70a6c0b36cad32c340ac84b10ab81c5e9dd2700.jpg" alt="">
+        </div>
+        <div class="prev" id="btn_prev" onclick="left()"></div>
+        <div class="next" id="btn_next" onclick="right()"></div>
+        <ul class="thumb_list">
+          <li onmouseover="thOver(1)"onmouseout="thOut(1)"id="thumb1" class="thumbnail show"><img src="http://img.wemep.co.kr/deal/3/114/2121143/thumb/9c6858f46938450637fab062590cd7ba07d367d4.jpg" alt=""></li>
+          <li onmouseover="thOver(2)"onmouseout="thOut(2)"id="thumb2" class="thumbnail"><img src="http://img.wemep.co.kr/deal/3/114/2121143/thumb/430b5744da76503a8927011b25c4c992e9ca62c7.jpg" alt=""></li>
+          <li onmouseover="thOver(3)"onmouseout="thOut(3)"id="thumb3" class="thumbnail"><img src="http://img.wemep.co.kr/deal/3/114/2121143/thumb/0ab37d4114532aa852b58adbfd877bccbc8963dd.jpg" alt=""></li>
+          <li onmouseover="thOver(4)"onmouseout="thOut(4)"id="thumb4" class="thumbnail"><img src="http://img.wemep.co.kr/deal/3/114/2121143/thumb/8aee06b6a60035c3dd61a917bf688ee5e971169b.jpg" alt=""></li>
+          <li onmouseover="thOver(5)"onmouseout="thOut(5)"id="thumb5" class="thumbnail"><img src="http://img.wemep.co.kr/deal/3/114/2121143/thumb/d70a6c0b36cad32c340ac84b10ab81c5e9dd2700.jpg" alt=""></li>
+        </ul>
+      </div>
+      <div class="info_area">
+        <span class="standardinfo">아이폰6/6S,아이폰7,플러스</span>
+        <h4 class="deal_tit">
+			  [마이폰] 디자인 전부다<br>아이폰 투명 젤리케이스			</h4>
+        <div class="price_info">
+          <div class="set_price_area">
+            <p class="sticker"><span class="dc_rate"></span></p>
+            <ul class="price">
+  						<li class="prime">
+  						  <span class="help">
+  								<span class="btn_help">
+  									위메프가?
+  								</span>
+                    <span class="layer_help">
+                      <i class="ico_arr"></i>
+    									기준 가격 산정이 어려워 위메프가 제시하는 합리적인 가격입니다.
+                    </span>
+  							</span>
+  						</li>
+              <li class="sale">
+                <span class="num">990</span><span class="won">원</span>
+              </li>
+						</ul>
+          </div>
+          <div id="cartCouponTemplateOrigin">
+            <div class="coupon_down_area">
+                <button type="button" class="btn_coupon_down">쿠폰 다운받기</button>
+                <div class="layer_coupon_down" id="cart_coupon_list">
+                    <div class="layer_coupon_head">
+                        <strong class="tit">쿠폰 다운받기</strong>
+                        <span class="txt">구매 시 사용 가능한 상품 쿠폰입니다.</span>
+                        <button type="button" class="btn_close" id="btn_coupon_down_close">닫기</button>
+                    </div>
+                    <div class="layer_coupon_cont">
+                        <div class="inner">
+                            <table class="table_coupon">
+                                <colgroup>
+                                    <col width="116">
+                                    <col width="243">
+                                    <col width="107">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>쿠폰명</th>
+                                        <th>사용조건</th>
+                                        <th>다운로드</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>[할인]게릴라쿠폰</td>
+                                        <td class="td_condition">
+                                            최소 25,000원 이상 구매시 1,500원 할인
+                                            <p class="ui ico-blt-aaa sm">사용범위 : PC/모바일웹/APP 사용가능</p>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn_down">받기</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="buy_time"><span id='buy_count'>229</span>개 구매</div>
+          <div class="wrap_option">
+            <div class="wcont_goods_option optionWrap">
+              <div class="option-select-box" id="option_select1">
+                <a id="ba1"onclick="select1()"href="#" title="상품을 선택해 주세요" class="selected price-area" data-selected="false">
+                  상품 선택
+                </a>
+                <ul id="bul1">
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">01_플로링 케이스</span>
+                      <span class="option-price"><strong>990</strong>원</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">02_꼬마공주 케이스</span>
+                      <span class="option-price"><strong>3,900</strong>원</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">03_하늘 케이스</span>
+                      <span class="option-price"><strong>3,900</strong>원</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">04_뉴 선인장 케이스</span>
+                      <span class="option-price"><strong>990</strong>원</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">05_혼잘 케이스</span>
+                      <span class="option-price"><strong>3,900</strong>원</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="option-select-box" id="option_select2">
+                <a id="ba2"href="#" onclick="select2()"title="상품을 선택해 주세요" class="selected price-area" data-selected="false">
+                  기종 선택
+                </a>
+                <ul id="bul2">
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">아이폰 6/6S</span>
+                      <span class="count">| 191개 남음</span>
+                      <span class="option-price"><strong>3,900</strong>원</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">아이폰 6플러스/6S플러스</span>
+                      <span class="count">| 199개 남음</span>
+                      <span class="option-price"><strong>3,900</strong>원</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">아이폰 7</span>
+                      <span class="count">| 191개 남음</span>
+                      <span class="option-price"><strong>3,900</strong>원</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">아이폰 7플러스</span>
+                      <span class="count">| 191개 남음</span>
+                      <span class="option-price"><strong>3,900</strong>원</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="option-select-box" id="option_select3">
+                <a id="ba3"href="#" onclick="select3()"title="상품을 선택해 주세요" class="selected price-area" data-selected="false" id="lastSelectOption">
+                  색상 선택
+                </a>
+                <ul id="bul3">
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">백설공주</span>
+                      <span class="count">| 191개 남음</span>
+                      <span class="option-price"><strong>3,900</strong>원</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">신데렐라</span>
+                      <span class="count">| 199개 남음</span>
+                      <span class="option-price"><strong>3,900</strong>원</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">엘리스</span>
+                      <span class="count">| 191개 남음</span>
+                      <span class="option-price"><strong>3,900</strong>원</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="price-area">
+                      <span class="szie">인어공주</span>
+                      <span class="count">| 191개 남음</span>
+                      <span class="option-price"><strong>3,900</strong>원</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="option_result">
+                <ul class="dealOptionSelected">
+                  <li class="d_o_view dealOptionSelectedRow fst">
+                    <span class="option_tit d_o_value">02_꼬마공주 케이스 | 아이폰6/6S | 백설공주</span>
+                    <span class="option_cnt">
+                      <input id="inputGoodsQty" class="d_o_cnt inputOptionQuantity" type="text" value="1" title="수량" name="wcont_goods_option" >
+                      <span class='btn_num'>
+                        <a style="cursor:pointer;" id="plus_qty">추가</a>
+                        <a style="cursor:pointer;" id="minus_qty">삭제</a>
+                      </span>
+                    </span>
+                    <span class="total"><em class="d_o_price orderPrice">3,900</em>원</span>
+                    <a href="#none" id="btndel" class="btn_option_del d_o_del deleteOptionQuantity">옵션삭제</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="option_total">
+                  <span class="txt">총상품금액</span>
+                  <span class="num"><span id="orderPriceTotal">0</span></span>
+                  <span class="one">원</span>
+              </div>
+            </div>
+          </div>
+          <div class="wrap_btn">
+  					<span class="ba_select_btn">
+  						<a id="btn_good" class="done" deal_id="2121143" cnt="81"><span class="btn_cnt ">81</span></a>
+  					</span>
+            <a class="btn_cart"></a>
+            <a class="btn_buy" ></a>
+					</div>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>
